@@ -186,7 +186,6 @@ await using var command = new MySqlCommand(sql, connection);
 // Adiciona o ID recebido na URL.
 command.Parameters.AddWithValue("@id", id);
 // Adiciona o novo nome.
-
 command.Parameters.AddWithValue("@nome", cliente.Nome);
 
 // Adiciona o telefone.
@@ -219,11 +218,7 @@ return Results.Ok(new
 .Produces(StatusCodes.Status500InternalServerError);
 
 // Este endpoint NÃO elimina fisicamente o cliente da base de dados. 
-// Em vez de utilizar: 
-// DELETE FROM clientes
-// vamos alterar: 
-// status = 0 // deleted_at = data/hora atual
-// Desta forma, o registo continua guardado na base de dados,  mas deixa de ser considerado um cliente ativo.
+// o registo continua guardado na base de dados,  mas deixa de ser considerado um cliente ativo.
  
 // // DELETE /api/clientes/5 
 app.MapDelete("/api/clientes/{id:int}", async (int id, MySqlConnectionFactory factory) => 
@@ -277,4 +272,55 @@ app.MapDelete("/api/clientes/{id:int}", async (int id, MySqlConnectionFactory fa
 .Produces(StatusCodes.Status404NotFound) 
 .Produces(StatusCodes.Status500InternalServerError);
 
+// Este endpoint permite criar um novo cliente. 
+// // POST /api/clientes 
+//  Os dados do cliente são recebidos no corpo da requisição 
+// // em formato JSON. 
+app.MapPost("/api/clientes", async (Cliente cliente, MySqlConnectionFactory factory) =>
+{ 
+    const string sql = """ 
+    INSERT INTO clientes ( nome, email, telefone, status, created_at ) 
+    VALUES ( @nome, @email, @telefone, 1, NOW() ); 
+    """;
+    
+    // Cria a ligação à base de dados.
+    await using var connection = factory.CreateConnection(); 
+    
+    // Abre a ligação ao MySQL. 
+    await connection.OpenAsync(); 
+
+    // Cria o comando SQL. 
+    await using var command = new MySqlCommand(sql, connection); 
+    
+    // Adiciona os dados recebidos. 
+    command.Parameters.AddWithValue("@nome", cliente.Nome); 
+    command.Parameters.AddWithValue("@email", cliente.Email); 
+    command.Parameters.AddWithValue( "@telefone", (object?)cliente.Telefone ?? DBNull.Value ); 
+    
+    // Executa o INSERT. 
+    await command.ExecuteNonQueryAsync(); 
+    
+    // Obtém o ID do cliente criado. 
+    var idCliente = (int)command.LastInsertedId; 
+    
+    return Results.Created( $"/api/clientes/{idCliente}", 
+        new 
+        { 
+            mensagem = "Cliente criado com sucesso!", 
+            id_cliente = idCliente, 
+            nome = cliente.Nome, 
+            email = cliente.Email, 
+            telefone = cliente.Telefone, 
+            status = 1 
+            } 
+    );
+    
+}) 
+
+.WithName("CriarCliente") 
+.WithSummary("Criar cliente") 
+.WithDescription("Cria um novo cliente na tabela clientes.") 
+.Produces(StatusCodes.Status201Created) 
+.Produces(StatusCodes.Status400BadRequest) 
+.Produces(StatusCodes.Status500InternalServerError);
 app.Run();
