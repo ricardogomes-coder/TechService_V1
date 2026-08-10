@@ -156,8 +156,16 @@ app.MapGet("/api/clientes/{id_cliente:int}", async (int id_cliente, MySqlConnect
 .Produces(StatusCodes.Status404NotFound)
 .Produces(StatusCodes.Status500InternalServerError);
 
+
+// Este endpoint permite alterar os dados de um cliente. 
+// PUT /api/clientes/5 
+// O ID do cliente é recebido através da URL. 
+// Os restantes dados são recebidos no corpo da requisição 
+// em formato JSON.
 app.MapPut("/api/clientes/{id}", async (int id, Cliente cliente, MySqlConnectionFactory factory) =>
 {
+    // SQL utilizado para atualizar o cliente.
+    // Apenas nome, telefone e email são alterados.
 const string sql = """
 UPDATE clientes
 SET
@@ -167,13 +175,23 @@ email = @email
 WHERE id_cliente = @id;
 """;
 
+// Cria a ligação ao MySQL.
 await using var connection = factory.CreateConnection();
+// Abre a ligação.
 await connection.OpenAsync();
 
+// Cria o comando SQL.
 await using var command = new MySqlCommand(sql, connection);
 
+// Adiciona o ID recebido na URL.
 command.Parameters.AddWithValue("@id", id);
+// Adiciona o novo nome.
+
 command.Parameters.AddWithValue("@nome", cliente.Nome);
+
+// Adiciona o telefone.
+// Se o telefone for null no objeto Cliente, 
+// enviamos DBNull.Value para o MySQL.
 command.Parameters.AddWithValue("@telefone", (object?)cliente.Telefone ?? DBNull.Value);
 command.Parameters.AddWithValue("@email", cliente.Email);
 
@@ -198,6 +216,65 @@ return Results.Ok(new
 .WithDescription("Atualiza o nome, telefone e email de um cliente pelo seu id_cliente.")
 .Produces(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status404NotFound)
+.Produces(StatusCodes.Status500InternalServerError);
+
+// Este endpoint NÃO elimina fisicamente o cliente da base de dados. 
+// Em vez de utilizar: 
+// DELETE FROM clientes
+// vamos alterar: 
+// status = 0 // deleted_at = data/hora atual
+// Desta forma, o registo continua guardado na base de dados,  mas deixa de ser considerado um cliente ativo.
+ 
+// // DELETE /api/clientes/5 
+app.MapDelete("/api/clientes/{id:int}", async (int id, MySqlConnectionFactory factory) => 
+{   
+    // Atualiza o cliente em vez de o eliminar. 
+    // // status = 0 -> cliente fica inativo // 
+    // deleted_at = NOW() -> guarda a data/hora da desativação 
+    const string sql = """ 
+        UPDATE clientes 
+        SET status = 0, ~
+        deleted_at = NOW() WHERE id_cliente = @id 
+        AND status = 1; 
+        """; 
+        
+        // Cria a ligação à base de dados.
+        await using var connection = factory.CreateConnection();
+
+        // Abre a ligação ao MySQL. 
+        await connection.OpenAsync(); 
+        
+        // Cria o comando SQL. 
+        await using var command = new MySqlCommand(sql, connection); 
+        
+        // Adiciona o ID recebido através da URL. 
+        command.Parameters.AddWithValue("@id", id); 
+
+        // Executa o UPDATE. O valor de rows indica quantos registos foram alterados. 
+        var rows = await command.ExecuteNonQueryAsync();
+
+        // Se nenhum registo foi alterado, significa que: // - o cliente não existe; OU // - o cliente já estava inativo. 
+        if (rows == 0) 
+        { 
+            return Results.NotFound(new { mensagem = "Cliente não encontrado ou já está inativo." }); 
+            
+        } 
+        // O cliente foi desativado com sucesso. 
+        // O registo continua na tabela clientes. 
+        return Results.Ok(new 
+        { 
+            mensagem = "Cliente desativado com sucesso!", 
+            id_cliente = id, 
+            status = 0 
+            }); 
+}) 
+
+.WithName("EliminarCliente")
+.WithSummary("Desativar cliente") 
+.WithDescription( "Desativa um cliente sem o eliminar fisicamente da base de dados. " 
+                + "O status passa para 0 e a data de eliminação é registada em deleted_at." ) 
+.Produces(StatusCodes.Status200OK) 
+.Produces(StatusCodes.Status404NotFound) 
 .Produces(StatusCodes.Status500InternalServerError);
 
 app.Run();
