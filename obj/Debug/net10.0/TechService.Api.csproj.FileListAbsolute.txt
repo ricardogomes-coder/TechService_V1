@@ -34,3 +34,4 @@ C:\Users\anago\OneDrive\Documentos\UC00614\TechService_V1\obj\Debug\net10.0\refi
 C:\Users\anago\OneDrive\Documentos\UC00614\TechService_V1\obj\Debug\net10.0\TechService.Api.pdb
 C:\Users\anago\OneDrive\Documentos\UC00614\TechService_V1\obj\Debug\net10.0\TechService.Api.genruntimeconfig.cache
 C:\Users\anago\OneDrive\Documentos\UC00614\TechService_V1\obj\Debug\net10.0\ref\TechService.Api.dll
+C:\Users\anago\OneDrive\Documentos\UC00614\TechService_V1\obj\Debug\net10.0\TechService.Api.sourcelink.json

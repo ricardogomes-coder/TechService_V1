@@ -156,4 +156,48 @@ app.MapGet("/api/clientes/{id_cliente:int}", async (int id_cliente, MySqlConnect
 .Produces(StatusCodes.Status404NotFound)
 .Produces(StatusCodes.Status500InternalServerError);
 
+app.MapPut("/api/clientes/{id}", async (int id, Cliente cliente, MySqlConnectionFactory factory) =>
+{
+const string sql = """
+UPDATE clientes
+SET
+nome = @nome,
+telefone = @telefone,
+email = @email
+WHERE id_cliente = @id;
+""";
+
+await using var connection = factory.CreateConnection();
+await connection.OpenAsync();
+
+await using var command = new MySqlCommand(sql, connection);
+
+command.Parameters.AddWithValue("@id", id);
+command.Parameters.AddWithValue("@nome", cliente.Nome);
+command.Parameters.AddWithValue("@telefone", (object?)cliente.Telefone ?? DBNull.Value);
+command.Parameters.AddWithValue("@email", cliente.Email);
+
+var rows = await command.ExecuteNonQueryAsync();
+
+if (rows == 0)
+{
+    return Results.NotFound(new
+    {
+        mensagem = "Cliente não encontrado."
+    });
+}
+
+return Results.Ok(new
+{
+    mensagem = "Cliente atualizado com sucesso!"
+});
+
+})
+.WithName("AtualizarCliente")
+.WithSummary("Atualizar cliente")
+.WithDescription("Atualiza o nome, telefone e email de um cliente pelo seu id_cliente.")
+.Produces(StatusCodes.Status200OK)
+.Produces(StatusCodes.Status404NotFound)
+.Produces(StatusCodes.Status500InternalServerError);
+
 app.Run();
