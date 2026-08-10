@@ -323,4 +323,5 @@ app.MapPost("/api/clientes", async (Cliente cliente, MySqlConnectionFactory fact
 .Produces(StatusCodes.Status201Created) 
 .Produces(StatusCodes.Status400BadRequest) 
 .Produces(StatusCodes.Status500InternalServerError);
+
 app.Run();
