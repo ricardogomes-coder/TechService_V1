@@ -505,11 +505,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+      "projectUniqueName": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
       "projectName": "TechService.Api",
-      "projectPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+      "projectPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
       "packagesPath": "C:\\Users\\anago\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\obj\\",
+      "outputPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\anago\\AppData\\Roaming\\NuGet\\NuGet.Config"

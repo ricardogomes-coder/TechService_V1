@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+tADqgQ9Szw=",
+  "dgSpecHash": "f6f1V32Lnkc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+  "projectFilePath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\anago\\.nuget\\packages\\microsoft.extensions.apidescription.server\\10.0.0\\microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
     "C:\\Users\\anago\\.nuget\\packages\\microsoft.openapi\\2.3.0\\microsoft.openapi.2.3.0.nupkg.sha512",
@@ -17,9 +17,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "TechService.Api depends on Swashbuckle.AspNetCore (>= 10.0.302) but Swashbuckle.AspNetCore 10.0.302 was not found. Swashbuckle.AspNetCore 10.1.0 was resolved instead.",
-      "projectPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+      "projectPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+      "filePath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net10.0"
@@ -29,9 +29,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'Microsoft.OpenApi' 2.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
-      "projectPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+      "projectPath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService_V1\\TechService.Api.csproj",
+      "filePath": "C:\\Users\\anago\\OneDrive\\Documentos\\UC00614\\TechService\\TechService_V1\\TechService.Api.csproj",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"
