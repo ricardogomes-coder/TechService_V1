@@ -1,0 +1,99 @@
+TECHSERVICE FRONTEND - V1 IEFP
+==============================
+
+OBJETIVO DA V1
+--------------
+Evoluir a V0 sem complicar a arquitetura.
+
+A V1 acrescenta:
+    1. tema claro / tela branca;
+    2. coluna AÇÕES na lista de clientes;
+    3. botão azul EDITAR em cada cliente;
+    4. botão vermelho EXCLUIR em cada cliente;
+    5. formulário de edição;
+    6. confirmação antes do DELETE;
+    7. atualização automática da lista após PUT/DELETE.
+
+
+ESTRUTURA
+---------
+Frontend/
+|
+|-- main.py
+|-- menu.py
+|-- config.py
+|-- crud_api.py
+|-- requirements.txt
+|
+|-- components/
+|   |-- crud_page.py
+|
+|-- pages/
+    |-- clientes_page.py
+
+
+O QUE NÃO MUDOU
+---------------
+CrudApi continua concentrando as chamadas HTTP.
+
+ClientesPage continua apenas configurando os campos de Cliente.
+
+main.py continua pequeno.
+
+
+V0
+--
+GET /api/clientes
+GET /api/clientes/{id}
+
+
+V1
+--
+GET    /api/clientes
+GET    /api/clientes/{id}
+PUT    /api/clientes/{id}
+DELETE /api/clientes/{id}
+
+O método DELETE utiliza CrudApi.desativar(), porque no Backend
+podemos implementar exclusão lógica em vez de apagar fisicamente.
+
+
+IMPORTANTE PARA A AULA
+----------------------
+Procure no código pelos comentários:
+
+    V1 - ...
+
+Eles indicam exatamente o que foi acrescentado em relação à V0.
+
+
+EXECUÇÃO
+--------
+cd C:\TechService\Frontend
+
+python -m venv .venv
+
+.\.venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+
+python main.py
+
+------------------------------------------------------------
+NOVA V1 - MELHORIA DO PAINEL "CONSULTAR CLIENTE"
+------------------------------------------------------------
+Nesta revisão da V1, o painel de consulta foi melhorado sem
+adicionar nova operação à API:
+
+1. "Registo encontrado" passou para "Cliente encontrado".
+2. Os campos ID, NOME, TELEFONE e EMAIL agora ocupam toda a
+   largura disponível do painel.
+3. Os campos ficaram com tamanho e alinhamento uniformes.
+4. Foi acrescentado o botão azul "Editar" ao resultado da
+   consulta.
+5. O botão "Editar" reutiliza o mesmo método _abrir_edicao()
+   usado pelos botões da tabela, evitando duplicação de código.
+
+Objetivo didático:
+Mostrar que podemos melhorar a interface e reutilizar código
+sem criar novas rotas ou aumentar a complexidade do projeto.
